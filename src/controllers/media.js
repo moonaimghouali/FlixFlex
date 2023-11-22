@@ -39,6 +39,42 @@ const getMedia =  async (req, res) => {
   }
 };
 
+const getTopMedia =  async (req, res) => {
+  try{
+   let type = req.query.type
+
+   let media = []
+   if(type ==='movie'){
+    media = await prismadb.media.findMany({
+      where : {
+        type : 'Movie'
+      },
+      orderBy: {
+        rating: 'desc', 
+      },
+      take : 5,
+      
+    })
+   }else{
+    media = await prismadb.media.findMany({
+      where : {
+        type : 'Serie'
+      },
+      orderBy: {
+        rating: 'desc', 
+      },
+      take : 5,
+    })
+
+   }
+    
+    res.status(200).send({data  :media, message : 'success'})
+  }catch(error)
+  {
+    res.status(500).send({success : false, message : error.message})
+  }
+};
+
 const searchMedia =  async (req, res) => {
     try{
       let q = req.query.q
@@ -105,4 +141,4 @@ const getMediaTrailer =  async (req, res) => {
 
 
 
-module.exports = {getMedia, searchMedia, getMediaDetails, getMediaTrailer}
+module.exports = {getMedia, getTopMedia, searchMedia, getMediaDetails, getMediaTrailer}

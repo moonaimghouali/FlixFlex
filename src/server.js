@@ -4,7 +4,7 @@ const express = require("express")
 const cors = require("cors")
 
 const {userLogin, addToFav, deletetFromFav, getFav} = require('./controllers/user')
-const {getMedia, searchMedia, getMediaDetails, getMediaTrailer} = require('./controllers/media')
+const {getMedia, getTopMedia, searchMedia, getMediaDetails, getMediaTrailer} = require('./controllers/media')
 
 
 //app initialization
@@ -24,6 +24,7 @@ app.get('/api/user/:id/favourite', getFav)
 
 // media routes
 app.get('/api/media', getMedia)
+app.get('/api/media/top', getTopMedia)
 app.get('/api/media/search', searchMedia)
 app.get('/api/media/:id/details', getMediaDetails)
 app.get('/api/media/:id/trailer', getMediaTrailer)

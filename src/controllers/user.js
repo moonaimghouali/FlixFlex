@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-// const {prismadb} = require('../../prisma/prismaClient.js')
 const {PrismaClient} = require('@prisma/client')
 
 const prismadb = new PrismaClient() 
@@ -34,31 +33,62 @@ const userLogin =  async (req, res) => {
 };
 
 const addToFav =  async (req, res) => {
-    try{
-      
-    }catch(error)
-    {
-      res.status(500).send({success : false, message : error})
-    }
+  try{
+    let id = parseInt(req.params.id)
+
+    const fav = await prismadb.favourite.create({
+      data : {
+        mediaId : req.body.mediaId,
+        userId : id,
+      }
+    })
+
+    res.status(201).send({message : 'Successfully added to favourites'})
+  }catch(error)
+  {
+    res.status(500).send({success : false, message : error})
+  }
 };
 
 const deletetFromFav =  async (req, res) => {
     try{
-      
+      let id = parseInt(req.params.id)
+
+      const fav = await prismadb.favourite.delete({
+        where : {
+          userId_mediaId : {
+            mediaId : req.body.mediaId,
+            userId : id,
+          }
+        }
+      })
+
+      res.status(200).send({message : 'Successfully deleted from favourites'})
     }catch(error)
     {
-      res.status(500).send({success : false, message : error})
+      res.status(500).send({success : false, message : error.message})
     }
 };
 
 const getFav =  async (req, res) => {
-    try{
-      
-      
-    }catch(error)
-    {
-      res.status(500).send({success : false, message : error})
-    }
+  try{
+    let id = parseInt(req.params.id)
+
+    let fav = []
+    fav = await prismadb.favourite.findMany({
+      where : {
+        userId : id,
+      },
+      include : {
+        media : true
+      }
+    })
+    
+    res.status(200).send({data : fav, message : 'success'})
+  }catch(error)
+  {
+    res.status(500).send({success : false, message : error.message})
+  }
 };
 
 

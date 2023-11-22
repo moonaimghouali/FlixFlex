@@ -15,7 +15,7 @@ model User {
   username              String @unique
   password              String
   
-  fav                   Favourite?
+  fav                   Favourite[]
 }
 
 model Media {
@@ -27,7 +27,7 @@ model Media {
   poster                String
   trailer               String
 
-  fav                   Favourite?
+  fav                   Favourite[]
   details               Details?
 }
 
@@ -43,8 +43,8 @@ model Details {
 }
 
 model Favourite {
-  userId                Int @unique
-  mediaId               Int @unique
+  userId                Int 
+  mediaId               Int 
 
   user    User  @relation(fields: [userId], references: [id])
   media   Media @relation(fields: [mediaId], references: [id])
